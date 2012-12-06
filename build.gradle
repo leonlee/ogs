@@ -48,6 +48,7 @@ allprojects {
         from 'src/main/scripts'
         into( 'lib' ) {
             from configurations.compile
+            exclude {jar -> jar.file.name.startsWith('groovy') || jar.file.name.startsWith('vertx')}
         }
     }
 
