@@ -1,1 +1,1 @@
-include 'bootstrap', 'tcp-server'
+include 'bootstrap', 'tcp-server', 'protocol'
