@@ -1,4 +1,4 @@
-allprojects {
+subprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'idea'
@@ -26,8 +26,22 @@ allprojects {
     }
 
     dependencies {
-        compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.0.0'
-        compile 'org.vert-x:vertx-lang-groovy:1.3.0.final'
+        compile "org.vert-x:vertx-core:$vertxVsn"
+        compile "org.vert-x:vertx-platform:$vertxVsn"
+        compile "org.vert-x:vertx-lang-java:$vertxVsn"
+        compile "org.vert-x:vertx-lang-groovy:$vertxVsn"
+        compile "org.vert-x:vertx-lang-rhino:$vertxVsn"
+        compile "org.mozilla:rhino:$rhinoVsn"
+
+        groovy "org.codehaus.groovy:groovy:$groovyVsn"
+
+        compile "org.msgpack:msgpack:$msgpackVsn"
+        compile "org.slf4j:slf4j-log4j12:$slf4jVsn"
+        compile "log4j:log4j:$log4jVsn"
+        compile "com.google.code.gson:gson:$gsonVsn"
+
+        testCompile "junit:junit:$junitVsn"
+        testCompile "org.vert-x:vertx-junit-annotations:$junitAnnoVsn"
     }
 
 
@@ -41,34 +55,34 @@ allprojects {
         }
     }
 
-    task copyMod( type:Copy, dependsOn: 'classes' ) {
+    task copyMod(type: Copy, dependsOn: 'classes') {
         into "build/mod/$modulename-v$version"
         from 'build/classes/main'
         from 'src/main/resources'
         from 'src/main/scripts'
-        into( 'lib' ) {
+        into('lib') {
             from configurations.compile
-            exclude {jar -> jar.file.name.startsWith('groovy') || jar.file.name.startsWith('vertx')}
+            exclude { jar -> jar.file.name.startsWith('groovy') || jar.file.name.startsWith('vertx') }
         }
     }
 
     // Package into build/libs/mod.zip
-    task dist( type: Zip, dependsOn: 'copyMod' ) {
+    task dist(type: Zip, dependsOn: 'copyMod') {
         destinationDir = project.file('build/libs')
         archiveName = "$modulename-v${version}.zip"
         from project.file("build/mod")
     }
 
-    task prepareVertxTest(type: Sync, dependsOn: 'copyMod' ) {
+    task prepareVertxTest(type: Sync, dependsOn: 'copyMod') {
         from 'build/mod'
         into 'build/tmp/mod-test'
     }
 
     test {
         // Can't have the app on the vert.x classpath
-        classpath = files( classpath.findAll {
-            !( it.toString() ==~ /.+build\/(classes|resources)\/main$/ )
-        } )
+        classpath = files(classpath.findAll {
+            !(it.toString() ==~ /.+build\/(classes|resources)\/main$/)
+        })
 
         // Some vert.x properties
         systemProperty 'vertx.test.timeout', 15
@@ -79,7 +93,7 @@ allprojects {
         testLogging.showStandardStreams = true
 
         // No idea why we need to depend on testClasses...
-        dependsOn << [ 'testClasses', 'copyMod', 'prepareVertxTest' ]
+        dependsOn << ['testClasses', 'copyMod', 'prepareVertxTest']
     }
 }
 
