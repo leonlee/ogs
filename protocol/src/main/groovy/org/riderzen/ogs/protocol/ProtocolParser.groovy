@@ -12,6 +12,7 @@ import org.vertx.java.core.buffer.Buffer
 import org.vertx.java.core.eventbus.Message
 import org.vertx.java.core.parsetools.RecordParser
 import com.google.gson.Gson
+import org.riderzen.ogs.common.AE
 
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
@@ -29,7 +30,7 @@ class ProtocolParser extends BusModBase {
     }
 
     def init() {
-        address = getOptionalStringConfig("address", "org.riderzen.ogs.protocol")
+        address = getOptionalStringConfig("address", AE.appProtocol.val)
 
         def msgHandler = { Buffer message ->
 
@@ -50,6 +51,11 @@ class ProtocolParser extends BusModBase {
 
                 logger.debug("message: $gson")
                 println("message: $tokens")
+
+                Buffer result = new Buffer("OK".getBytes())
+                event.reply(result)
+
+                logger.debug("result was sent")
             }
         })
     }
