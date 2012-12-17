@@ -1,7 +1,7 @@
 package org.riderzen.ogs.tcp
 
 import org.vertx.java.busmods.BusModBase
-import org.riderzen.ogs.common.AE
+import org.riderzen.ogs.common.E
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
  * Date: 12-12-7
@@ -22,7 +22,7 @@ class TcpServer extends BusModBase {
     def onConnected = { sock ->
         sock.dataHandler { buffer ->
             logger.debug("received ${buffer.lenght} bytes of data")
-            eb.send(AE.appProtocol.val, buffer) { message ->
+            eb.send(E.appProtocol.val, buffer) { message ->
                 sock << message
             }
         }

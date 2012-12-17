@@ -1,18 +1,14 @@
 package org.riderzen.ogs.protocol
 
-import org.json.simple.JSONArray
-import org.json.simple.JSONObject
-import org.json.simple.parser.JSONParser
 import org.msgpack.MessagePack
 import org.msgpack.unpacker.Unpacker
-import org.msgpack.util.json.JSON
 import org.vertx.java.busmods.BusModBase
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer
 import org.vertx.java.core.eventbus.Message
 import org.vertx.java.core.parsetools.RecordParser
 import com.google.gson.Gson
-import org.riderzen.ogs.common.AE
+import org.riderzen.ogs.common.E
 
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
@@ -30,7 +26,7 @@ class ProtocolParser extends BusModBase {
     }
 
     def init() {
-        address = getOptionalStringConfig("address", AE.appProtocol.val)
+        address = getOptionalStringConfig("address", E.appProtocol.val)
 
         def msgHandler = { Buffer message ->
 
