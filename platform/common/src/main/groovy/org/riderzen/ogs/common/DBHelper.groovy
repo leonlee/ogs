@@ -51,7 +51,7 @@ class DBHelper {
             whereClause = "${model.primaryKeys[0]}=:id"
             params.put('id', model.getProperty(model.primaryKeys[0]))
         }
-        def row = sql.firstRow("select * from ${tableName} $whereClause", params)
+        def row = sql.firstRow("select * from ${model.tableName} $whereClause", params)
 
         model.pAttributes().each { key, value ->
             model[key] = row[key]

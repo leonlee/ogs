@@ -1,7 +1,10 @@
-subprojects {
+def emptyProjects = ['modules', 'platform',]
+
+configure(subprojects.findAll { project -> !emptyProjects.find {it == project.name}  }) {
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'idea'
+
     group = 'org.riderzen.ogs'
 
     sourceCompatibility = '1.7'
@@ -98,10 +101,8 @@ subprojects {
     }
 }
 
-configure(subprojects.findAll {it.name != 'common'}) {
+configure(subprojects.findAll { project -> project.path != ':platform:common' && !emptyProjects.find { it == project.name}}) {
     dependencies {
-        compile project(':common')
+        compile project(':platform:common')
     }
 }
-
-

@@ -1,1 +1,24 @@
-include 'common', 'bootstrap', 'tcp-server', 'protocol'
+include 'bootstrap', 'platform', 'modules'
+include 'platform:common', 'platform:protocol', 'platform:tcp-server'
+include 'modules:sys-auth'
+
+
+rootProject.name = 'ogs'
+
+//def fixProjectPath(project, prefix, dir){
+//    if (project.name.startsWith(prefix)) {
+//        String projectDirName = "$dir/${project.name}"
+//        project.projectDir = new File(settingsDir, projectDirName)
+//        project.buildFileName = "build.gradle"
+//
+//        assert project.projectDir.isDirectory()
+//        assert project.buildFile.isFile()
+//    }
+//}
+//
+//rootProject.children.each { project ->
+//    println "setting project path: ${project.name}"
+//    fixProjectPath(project, 'plat-', 'platform')
+//    fixProjectPath(project, 'mod-', 'modules')
+//
+//}
