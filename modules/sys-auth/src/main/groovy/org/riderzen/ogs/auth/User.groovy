@@ -35,7 +35,7 @@ class User extends BaseModel {
     Long lastNodeId
     Long lastLoginOn
 
-    static User register(EventHelper eh) {
+    static register(EventHelper eh) {
         def param = eh.param
 
         User user = new User()

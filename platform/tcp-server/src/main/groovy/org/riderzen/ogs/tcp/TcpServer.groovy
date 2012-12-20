@@ -1,7 +1,11 @@
 package org.riderzen.ogs.tcp
 
+import org.msgpack.MessagePack
+import org.msgpack.packer.Packer
 import org.vertx.java.busmods.BusModBase
 import org.riderzen.ogs.common.Address
+import org.vertx.java.core.buffer.Buffer
+
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
  * Date: 12-12-7
@@ -23,7 +27,11 @@ class TcpServer extends BusModBase {
         sock.dataHandler { buffer ->
             logger.debug("received ${buffer.lenght} bytes of data")
             eb.send(Address.appProtocol.val, buffer) { message ->
-                sock << message
+                MessagePack msgpack = new MessagePack()
+                def stream = new ByteArrayOutputStream()
+                Packer packer = msgpack.createPacker(stream)
+                packer.write(message.body.toString().getBytes())
+                sock << new Buffer(stream.toByteArray())
             }
         }
         sock.exceptionHandler { e ->

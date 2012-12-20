@@ -2,15 +2,12 @@ package org.riderzen.ogs.common
 
 import org.vertx.groovy.core.Vertx
 import org.vertx.groovy.core.eventbus.EventBus
-import org.vertx.groovy.core.eventbus.Message
 import org.vertx.groovy.deploy.Container
 import org.vertx.java.core.eventbus.Message
 import org.vertx.java.core.json.JsonObject
 import org.vertx.java.core.logging.Logger
 
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Event Helper
@@ -50,17 +47,17 @@ class EventHelper {
         message?.body
     }
 
-    void sendOK(Message<JsonObject> message) {
-        sendOK(message, null)
+    void sendOK() {
+        sendOK(null)
     }
 
-    void sendStatus(String status, Message<JsonObject> message) {
-        sendStatus(status, message, null)
+    void sendStatus(String status) {
+        sendStatus(status, null)
     }
 
-    void sendStatus(String status, Message<JsonObject> message, JsonObject json) {
+    void sendStatus(String status, JsonObject json) {
         if (counter.decrementAndGet()) return
-        
+
         if (json == null) {
             json = new JsonObject()
         }
@@ -68,15 +65,15 @@ class EventHelper {
         message.reply(json)
     }
 
-    void sendOK(Message<JsonObject> message, JsonObject json) {
-        sendStatus("ok", message, json)
+    void sendOK(JsonObject json) {
+        sendStatus("ok", json)
     }
 
-    void sendError(Message<JsonObject> message, String error) {
-        sendError(message, error, null)
+    void sendError(String error) {
+        sendError(error, null)
     }
 
-    void sendError(Message<JsonObject> message, String error, Exception e) {
+    void sendError(String error, Exception e) {
         logger.error(error, e)
         JsonObject json = new JsonObject().putString("status", "error").putString("message", error)
         message.reply(json)

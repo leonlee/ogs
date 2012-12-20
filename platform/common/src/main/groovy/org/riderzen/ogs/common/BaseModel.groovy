@@ -52,7 +52,7 @@ class BaseModel {
             afterValidate?.call()
             eh.newProcess(1)
             eh.eb.send(Address.platJdbc.val, this) { message ->
-                eh.sendOK()
+                eh.sendOK(this)
             }
         }
     }
@@ -64,5 +64,9 @@ class BaseModel {
             throw new InvalidModelException(errors)
         }
         true
+    }
+
+    def toJson() {
+
     }
 }
