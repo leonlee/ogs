@@ -7,6 +7,7 @@ import net.sf.oval.constraint.MaxLength
 import net.sf.oval.constraint.MinLength
 import net.sf.oval.constraint.NotNull
 import org.riderzen.ogs.common.BaseModel
+import org.riderzen.ogs.common.EventHelper
 import org.riderzen.ogs.common.Tools
 
 /**
@@ -17,7 +18,8 @@ class User extends BaseModel {
     @MinLength(6)
     @MaxLength(64)
     String username
-    @NotNull
+    @MinLength(6)
+    @MaxLength(32)
     String password
     @NotNull
     UserType type
@@ -33,21 +35,24 @@ class User extends BaseModel {
     Long lastNodeId
     Long lastLoginOn
 
-    static User register(String username, String password, String email = null,
-                         String mobile = null, String deviceToken = null, String clientVersion = null) {
-        User user = new User()
-        user.username = username
-        user.password = Tools.encrypt(password)
-        user.email = email
-        user.mobile = mobile
-        user.deviceToken = deviceToken
-        user.clientVersion = clientVersion
+    static User register(EventHelper eh) {
+        def param = eh.param
 
-        if (email) {
+        User user = new User()
+        user.username = param.username
+        user.password = param.password
+        user.email = param.email
+        user.mobile = param.mobile
+        user.deviceToken = param.deviceToken
+        user.clientVersion = param.clientVersion
+
+        if (param.email) {
             user.emailBindOn = Tools.currentTime()
         }
 
-        User.save()
+        user.save(eh) {
+            user.password = Tools.encrypt(user.password)
+        }
     }
 }
 

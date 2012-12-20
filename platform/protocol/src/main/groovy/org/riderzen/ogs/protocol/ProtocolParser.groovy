@@ -8,7 +8,7 @@ import org.vertx.java.core.buffer.Buffer
 import org.vertx.java.core.eventbus.Message
 import org.vertx.java.core.parsetools.RecordParser
 import com.google.gson.Gson
-import org.riderzen.ogs.common.E
+import org.riderzen.ogs.common.Address
 
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
@@ -26,7 +26,7 @@ class ProtocolParser extends BusModBase {
     }
 
     def init() {
-        address = getOptionalStringConfig("address", E.appProtocol.val)
+        address = getOptionalStringConfig("address", Address.appProtocol.val)
 
         def msgHandler = { Buffer message ->
 

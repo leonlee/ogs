@@ -1,14 +1,17 @@
 package org.riderzen.ogs.common
 
-import hirondelle.date4j.DateTime
 import net.sf.oval.Validator
 import net.sf.oval.constraint.NotNull
+
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
  * Date: 12-12-7
  */
 class BaseModel {
+    AtomicInteger eventCounter = new AtomicInteger(0)
+
     @NotNull
     Long id
     @NotNull
@@ -37,7 +40,7 @@ class BaseModel {
         propMap
     }
 
-    def save() {
+    def save(EventHelper eh, afterValidate = null, afterSave = null) {
         if (!id){
             id = DBHelper.nextID()
             createdOn = Tools.currentTime()
@@ -46,7 +49,11 @@ class BaseModel {
         }
 
         if (validate()) {
-
+            afterValidate?.call()
+            eh.newProcess(1)
+            eh.eb.send(Address.platJdbc.val, this) { message ->
+                eh.sendOK()
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 dependencies {
     compile "net.sf.oval:oval:$ovalVsn"
     compile "commons-codec:commons-codec:$commonsCodecVsn"
+    compile "org.apache.commons:commons-lang3:$commonsLang3Vsn"
     compile "date4j:date4j:$date4jVsn"
 }
