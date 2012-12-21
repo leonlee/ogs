@@ -10,8 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger
  * Date: 12-12-7
  */
 class BaseModel {
-    AtomicInteger eventCounter = new AtomicInteger(0)
-
     @NotNull
     Long id
     @NotNull
@@ -24,6 +22,7 @@ class BaseModel {
     static def transientAttributes = ['class', 'metaClass', 'transientAttributes', 'tableName']
 
     BaseModel() {
+
     }
 
     static def excludeAttributes(fields) {
@@ -40,7 +39,7 @@ class BaseModel {
         propMap
     }
 
-    def save(EventHelper eh, afterValidate = null, afterSave = null) {
+    def validate() {
         if (!id){
             id = DBHelper.nextID()
             createdOn = Tools.currentTime()
@@ -48,16 +47,6 @@ class BaseModel {
             vsn = 0
         }
 
-        if (validate()) {
-            afterValidate?.call()
-            eh.newProcess(1)
-            eh.eb.send(Address.platJdbc.val, this) { message ->
-                eh.sendOK(this)
-            }
-        }
-    }
-
-    def validate() {
         Validator validator = new Validator()
         def errors = validator.validate(this)
         if (errors) {

@@ -5,9 +5,9 @@ package org.riderzen.ogs.common
  * Date: 12-12-16
  */
 enum Address {
-    appProtocol("org.riderzen.ogs.protocol"),
-    sysAuthRegister("org.riderzen.ogs.mod.sys-auth.register"),
-    platJdbc("org.riderzen.ogs.plat.jdbc")
+    appProtocol("ogs.protocol"),
+    sysAuthRegister("ogs.mod.sys-auth.register"),
+    platJdbc("ogs.plat.jdbc")
 
     public String val;
 

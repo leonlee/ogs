@@ -93,6 +93,7 @@ configure(subprojects.findAll { project -> !emptyProjects.find {it == project.na
         systemProperty 'vertx.test.timeout', 15
         systemProperty 'vertx.mods', "$projectDir/build/tmp/mod-test"
         systemProperty 'vertx.version', "$project.version"
+        systemProperty 'org.vertx.logger-delegate-factory-class-name', "org.vertx.java.core.logging.impl.Log4jLogDelegateFactory"
 
         // Show output
         testLogging.showStandardStreams = true

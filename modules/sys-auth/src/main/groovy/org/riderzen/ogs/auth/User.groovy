@@ -19,7 +19,7 @@ class User extends BaseModel {
     @MaxLength(64)
     String username
     @MinLength(6)
-    @MaxLength(32)
+    @MaxLength(64)
     String password
     @NotNull
     UserType type
@@ -35,12 +35,12 @@ class User extends BaseModel {
     Long lastNodeId
     Long lastLoginOn
 
-    static register(EventHelper eh) {
-        def param = eh.param
-
+    static User populate(param) {
         User user = new User()
         user.username = param.username
-        user.password = param.password
+        if (param?.password) {
+            user.password = Tools.encrypt(param.password)
+        }
         user.email = param.email
         user.mobile = param.mobile
         user.deviceToken = param.deviceToken
@@ -50,9 +50,7 @@ class User extends BaseModel {
             user.emailBindOn = Tools.currentTime()
         }
 
-        user.save(eh) {
-            user.password = Tools.encrypt(user.password)
-        }
+        validate() ? user : null
     }
 }
 

@@ -3,6 +3,7 @@ package org.riderzen.ogs.common
 import hirondelle.date4j.DateTime
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.lang3.LocaleUtils
+import org.vertx.java.core.logging.impl.LoggerFactory
 
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
@@ -12,7 +13,7 @@ class Tools {
     private static ResourceBundle bundle
 
     static final String MESSAGES = "messages"
-    static logger = EventHelper.container.logger
+    static logger = LoggerFactory.getLogger(Tools.class)
     static salt = "sJK" + "Vn3I" + "GFwj" + "dty37"
 
     static encrypt(message) {
@@ -67,5 +68,9 @@ class Tools {
                 bundle = ResourceBundle.getBundle(MESSAGES)
             }
         }
+    }
+
+    static def nextRid() {
+        UUID.randomUUID().toString();
     }
 }
