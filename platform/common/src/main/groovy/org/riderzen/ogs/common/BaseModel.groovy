@@ -1,9 +1,9 @@
 package org.riderzen.ogs.common
 
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
 import net.sf.oval.Validator
 import net.sf.oval.constraint.NotNull
-
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * User: Leon Lee <mail.lgq@gmail.com>
@@ -40,8 +40,8 @@ class BaseModel {
     }
 
     def validate() {
-        if (!id){
-            id = DBHelper.nextID()
+        if (!id) {
+            id = DBHelper.nextId()
             createdOn = Tools.currentTime()
             updatedOn = createdOn
             vsn = 0
@@ -55,7 +55,24 @@ class BaseModel {
         true
     }
 
-    def toJson() {
-
+    def String toJson() {
+        createBuilder()
+                .create()
+                .toJson(this)
     }
+
+    def fromJson(String json) {
+        createBuilder()
+                .create()
+                .fromJson(json, this.class)
+    }
+
+    static GsonBuilder createBuilder() {
+        new GsonBuilder()
+                .registerTypeAdapter()
+                .serializeNulls()
+                .excludeFieldsWithoutExposeAnnotation()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+    }
+
 }

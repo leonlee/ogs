@@ -1,10 +1,10 @@
 package org.riderzen.ogs.common
 
+import com.google.gson.Gson
 import org.vertx.groovy.core.Vertx
 import org.vertx.groovy.core.eventbus.EventBus
 import org.vertx.groovy.deploy.Container
 import org.vertx.java.core.eventbus.Message
-import org.vertx.java.core.json.JsonObject
 import org.vertx.java.core.logging.Logger
 
 import java.util.concurrent.atomic.AtomicInteger
@@ -48,34 +48,28 @@ class EventHelper {
     }
 
     void sendOK() {
-        sendOK(null)
+        sendOK(Status.OK)
     }
 
-    void sendStatus(String status) {
+    void sendStatus(int status) {
         sendStatus(status, null)
     }
 
-    void sendStatus(String status, JsonObject json) {
+    void sendStatus(int status, Object data) {
         if (counter.decrementAndGet()) return
 
-        if (json == null) {
-            json = new JsonObject()
-        }
-        json.putString("status", status)
-        message.reply(json)
+        message.reply(new Gson().toJson([status: status, data: data]))
     }
 
-    void sendOK(JsonObject json) {
-        sendStatus("ok", json)
+    void sendOK(Object data) {
+        sendStatus(Status.OK, data)
     }
 
     void sendError(String error) {
-        sendError(error, null)
+        sendError(Status.SERVER_ERROR, error)
     }
 
-    void sendError(String error, Exception e) {
-        logger.error(error, e)
-        JsonObject json = new JsonObject().putString("status", "error").putString("message", error)
-        message.reply(json)
+    void sendError(int status, String error) {
+        message.reply(new Gson([status: status, error: error]))
     }
 }

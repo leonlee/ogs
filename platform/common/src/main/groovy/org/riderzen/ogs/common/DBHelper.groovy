@@ -98,4 +98,8 @@ class DBHelper {
     static def defaultSql() {
         return null;
     }
+
+    static long nextId() {
+
+    }
 }

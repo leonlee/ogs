@@ -12,9 +12,10 @@ class RegisterProcessor{
     EventHelper eh
 
     def process() {
-        if (User.populate(eh.param)) {
+        def user = User.populate(eh.param)
+        if (user) {
             eh.newProcess(1)
-            eh.eb.send(Address.platJdbc.val, this) { message ->
+            eh.eb.send(Address.platJdbc.val, user.toJson()) { message ->
                 eh.sendOK(user.toJson())
             }
         }
