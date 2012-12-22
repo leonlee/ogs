@@ -1,5 +1,3 @@
-import org.msgpack.MessagePack
-import org.msgpack.packer.Packer
 import org.riderzen.ogs.common.Address
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.eventbus.Message
@@ -42,15 +40,18 @@ if (backlog > 0)
     server.acceptBacklog = backlog
 
 server.connectHandler { sock ->
-    sock.dataHandler { Buffer buffer ->
+    sock.dataHandler { buffer ->
         logger.debug("received ${buffer.getLength()} bytes of data")
+        println("received ${buffer.getLength()} bytes of data")
         eb.send(Address.appProtocol.val, buffer) { Message message ->
             logger.debug "received message ${message.body}"
-            sock << message.body as Buffer
+            println "received message ${message.body}"
+            sock.write(buffer as Buffer)
         }
     }
     sock.exceptionHandler { e ->
         logger.error("caught error", e)
+        println("caught error", e)
     }
 
 }.listen(port, host)

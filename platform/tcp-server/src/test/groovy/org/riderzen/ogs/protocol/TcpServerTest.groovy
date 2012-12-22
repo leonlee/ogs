@@ -40,12 +40,12 @@ class TcpServerTest extends VertxTestBase {
 
     @Test
     def void testTcpServer() {
-        getVertx().eventBus().registerHandler('ogs.protocol', new Handler<Message>() {
-            @Override
-            void handle(Message event) {
-                logger.debug("get event" + event.body)
-            }
-        })
+//        getVertx().eventBus().registerHandler('ogs.protocol', new Handler<Message>() {
+//            @Override
+//            void handle(Message event) {
+//                logger.debug("get event" + event.body)
+//            }
+//        })
 
 //        sleep(1000000)
 

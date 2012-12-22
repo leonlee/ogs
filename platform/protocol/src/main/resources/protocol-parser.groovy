@@ -18,8 +18,8 @@ def logger = container.logger
 
 logger.info "starting protocol-parser"
 
-eb.registerHandler(config?.address ?: Address.appProtocol.val) { Message rawMessage ->
-    Buffer buffer = rawMessage.body as Buffer
+eb.registerHandler(config?.address ?: Address.appProtocol.val) { Message upstream ->
+    def buffer = upstream.body
 
     MessagePack msgpack = new MessagePack()
     Unpacker unpacker = msgpack.createUnpacker(new ByteArrayInputStream(buffer.getBytes()))
@@ -40,6 +40,6 @@ eb.registerHandler(config?.address ?: Address.appProtocol.val) { Message rawMess
         Packer packer = msgpack.createPacker(out)
         packer.write((String) reply.body)
 
-        reply.reply new Buffer(out.toByteArray())
+        upstream.reply new Buffer(out.toByteArray())
     }
 }

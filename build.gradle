@@ -78,6 +78,11 @@ configure(subprojects.findAll { project -> !emptyProjects.find {it == project.na
         from project.file("build/mod")
     }
 
+    task installMod(type: Copy, dependsOn: 'copyMod') {
+        into "${System.getenv('VERTX_HOME').replaceAll('\\\\', '/')}/mods"
+        from "build/mod"
+    }
+
     task prepareVertxTest(type: Sync, dependsOn: 'copyMod') {
         from 'build/mod'
         into 'build/tmp/mod-test'
