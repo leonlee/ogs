@@ -32,13 +32,13 @@ eb.registerHandler(config?.address ?: Address.appProtocol.val) { Message upstrea
     logger.debug "received rid:${rid} endpoint:${message.endpoint} params:${message.params}"
     println "received rid:${rid} endpoint:${message.endpoint} params:${message.params}"
 
-    eb.send(message.endpoint, gson.toJson([rid: rid, params: message.params])) { Message reply ->
-        logger.debug "received reply ${reply.body}"
-        println "received reply ${reply.body}"
+    eb.send(message.endpoint, gson.toJson([rid: rid, params: message.params])) { Message downstream ->
+        logger.debug "received downstream ${downstream.body}"
+        println "received downstream ${downstream.body}"
 
         ByteArrayOutputStream out = new ByteArrayOutputStream()
         Packer packer = msgpack.createPacker(out)
-        packer.write((String) reply.body)
+        packer.write((String) downstream.body)
 
         upstream.reply new Buffer(out.toByteArray())
     }

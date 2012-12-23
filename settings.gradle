@@ -1,5 +1,5 @@
 include 'bootstrap', 'platform', 'modules'
-include 'platform:common', 'platform:protocol', 'platform:tcp-server', 'platform:test'
+include 'platform:common', 'platform:protocol', 'platform:tcp-server', 'platform:data-store', 'platform:test'
 include 'modules:sys-auth'
 
 

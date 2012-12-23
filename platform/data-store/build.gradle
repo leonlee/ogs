@@ -1,0 +1,4 @@
+dependencies {
+    compile "com.jolbox:bonecp:${boneCPVsn}"
+    runtime "mysql:mysql-connector-java:${mysqlVsn}"
+}

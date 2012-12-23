@@ -1,0 +1,24 @@
+{
+    "shards": [
+        {
+            "url": "jdbc:mysql://192.168.1.105:3306/ogs1?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false",
+            "user": "root",
+            "password": "password",
+            "range": [0, 9999999],
+            "partitionCount": 4,
+            "maxConnectionsPerPartition": 50,
+            "minConnectionsPerPartition": 5,
+            "acquireIncrement": 10
+        },
+        {
+            "url": "jdbc:mysql://192.168.1.105:3306/ogs2?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false",
+            "user": "root",
+            "password": "password",
+            "range": [10000000, 19999999],
+            "partitionCount": 4,
+            "maxConnectionsPerPartition": 50,
+            "minConnectionsPerPartition": 5,
+            "acquireIncrement": 10
+        }
+    ]
+}

@@ -7,7 +7,7 @@ package org.riderzen.ogs.common
 enum Address {
     appProtocol("ogs.protocol"),
     sysAuthRegister("ogs.mod.sys-auth.register"),
-    platJdbc("ogs.plat.jdbc")
+    dataStore("ogs.plat.data-store")
 
     public String val;
 

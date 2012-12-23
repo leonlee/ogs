@@ -1,6 +1,6 @@
-package org.riderzen.ogs.common
+package org.riderzen.ogs.ds
 
-import groovy.sql.Sql
+import org.riderzen.ogs.common.NoPropertyFoundException
 import org.slf4j.LoggerFactory
 
 /**
@@ -22,7 +22,12 @@ class DBHelper {
 
         def sql = getShardSql(model)
         def dataSet = sql.dateSet(tableName)
+        def id = nextId()
+        model.id = id as String
+        model.vsn = 0
         dataSet.add(model.pAttributes())
+
+        id
     }
 
     static def batchSave(models) {
@@ -96,7 +101,7 @@ class DBHelper {
     }
 
     static def defaultSql() {
-        return null;
+        return DataSourceHolder.defaultSql;
     }
 
     static long nextId() {

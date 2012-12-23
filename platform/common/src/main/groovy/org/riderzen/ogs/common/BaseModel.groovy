@@ -10,13 +10,11 @@ import net.sf.oval.constraint.NotNull
  * Date: 12-12-7
  */
 class BaseModel {
-    @NotNull
     Long id
     @NotNull
     Long createdOn
     @NotNull
     Long updatedOn
-    @NotNull
     Long vsn
 
     static def transientAttributes = ['class', 'metaClass', 'transientAttributes', 'tableName']
@@ -41,10 +39,8 @@ class BaseModel {
 
     def validate() {
         if (!id) {
-            id = DBHelper.nextId()
             createdOn = Tools.currentTime()
             updatedOn = createdOn
-            vsn = 0
         }
 
         Validator validator = new Validator()
@@ -69,8 +65,7 @@ class BaseModel {
 
     static GsonBuilder createBuilder() {
         new GsonBuilder()
-                .registerTypeAdapter()
-                .serializeNulls()
+//                .serializeNulls()
                 .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
     }

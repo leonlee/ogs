@@ -3,6 +3,7 @@ package org.riderzen.ogs.common
 import hirondelle.date4j.DateTime
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.lang3.LocaleUtils
+import org.vertx.java.core.impl.Context
 import org.vertx.java.core.logging.impl.LoggerFactory
 
 /**
@@ -72,5 +73,9 @@ class Tools {
 
     static def nextRid() {
         UUID.randomUUID().toString();
+    }
+
+    static getLogger() {
+        Context.context.deploymentHandle.logger
     }
 }
