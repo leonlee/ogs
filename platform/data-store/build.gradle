@@ -1,4 +1,5 @@
 dependencies {
     compile "com.jolbox:bonecp:${boneCPVsn}"
+    compile "com.googlecode.xmemcached:xmemcached:${xmemcachedVsn}"
     runtime "mysql:mysql-connector-java:${mysqlVsn}"
 }

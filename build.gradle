@@ -79,7 +79,7 @@ configure(subprojects.findAll { project -> !emptyProjects.find {it == project.na
     }
 
     task installMod(type: Copy, dependsOn: 'copyMod') {
-        into "${System.getenv('VERTX_HOME').replaceAll('\\\\', '/')}/mods"
+        into "${System.getenv('VERTX_HOME')?.replaceAll('\\\\', '/')?:rootProject.projectDir + '/build'}/mods"
         from "build/mod"
     }
 
