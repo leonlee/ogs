@@ -1,5 +1,6 @@
 package org.riderzen.ogs.ds
 
+import org.riderzen.ogs.common.BaseEntity
 import org.riderzen.ogs.common.NoPropertyFoundException
 import org.slf4j.LoggerFactory
 
@@ -10,22 +11,22 @@ import org.slf4j.LoggerFactory
 class DBHelper {
     def static logger = LoggerFactory.getLogger(DBHelper.class)
 
-    static def save(model) {
-        if (!model.metaClass.hasProperty('tableName')) {
-            logger.error("No tableName property found in $model")
+    static def save(BaseEntity entity) {
+        if (!entity.metaClass.hasProperty('tableName')) {
+            logger.error("No tableName property found in $entity")
             throw new NoPropertyFoundException('tableName')
         }
 
-        def tableName = model.tableName
+        def tableName = entity.entityName
 
         logger.debug("working on table $tableName")
 
-        def sql = getShardSql(model)
+        def sql = getShardSql(entity)
         def dataSet = sql.dateSet(tableName)
         def id = nextId()
-        model.id = id as String
-        model.vsn = 0
-        dataSet.add(model.pAttributes())
+        entity.id = id as String
+        entity.vsn = 0
+        dataSet.add(entity.pAttributes)
 
         id
     }
@@ -41,37 +42,37 @@ class DBHelper {
         }
     }
 
-    static def find(model) {
-        def sql = getShardSql(model)
+    static def find(BaseEntity entity) {
+        def sql = getShardSql(entity)
         def whereClause;
         def params = new HashMap();
-        if (model.primaryKeys?.size() > 1) {
+        if (entity.primaryKeys?.size() > 1) {
             def whereBuilder = new StringBuilder(" where true ")
-            model.primaryKeys.each {
+            entity.primaryKeys.each {
                 whereBuilder.append("and ${it}=:${it} ")
-                params.put(it, model.getProperty(it))
+                params.put(it, entity.getProperty(it))
             }
             whereClause = whereBuilder.toString()
         } else {
-            whereClause = "${model.primaryKeys[0]}=:id"
-            params.put('id', model.getProperty(model.primaryKeys[0]))
+            whereClause = "${entity.primaryKeys[0]}=:id"
+            params.put('id', entity.getProperty(entity.primaryKeys[0]))
         }
-        def row = sql.firstRow("select * from ${model.tableName} $whereClause", params)
+        def row = sql.firstRow("select * from ${entity.entityName} $whereClause", params)
 
-        model.pAttributes().each { key, value ->
-            model[key] = row[key]
+        entity.pAttributes.each { key, value ->
+            entity[key] = row[key]
         }
-        model
+        entity
     }
 
 
-    def static String generateInsertSql(model) {
+    def static String generateInsertSql(BaseEntity entity) {
         StringBuilder buffer = new StringBuilder("insert into ")
-        buffer.append(model.tableName)
+        buffer.append(entity.entityName)
         buffer.append(" (")
         StringBuilder paramBuffer = new StringBuilder()
         boolean first = true
-        for (String column : model.pAttributes().keySet()) {
+        for (String column : entity.pAttributes.keySet()) {
             if (first) {
                 first = false
                 paramBuffer.append("?")
@@ -88,10 +89,10 @@ class DBHelper {
         buffer.toString()
     }
 
-    static def getShardSql(model) {
+    static def getShardSql(BaseEntity entity) {
         def sql = defaultSql()
-        if (model.metaClass.hasProperty('shardBy')) {
-            def shardBy = model.shardBy
+        if (entity.metaClass.hasProperty('shardBy')) {
+            def shardBy = entity.shardBy
 
             logger.debug("shadBy: $shardBy")
 

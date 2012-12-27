@@ -5,5 +5,5 @@ package org.riderzen.ogs.common
  * Date: 12-12-23
  */
 enum DataStoreOperation {
-    create, read, update, delete, count, readOne, createBatch, updateBatch, deleteBatch
+    create, read, update, delete, count, readOne, createBatch, updateBatch, deleteBatch, beginTx, commit, roollbak
 }

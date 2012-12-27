@@ -14,17 +14,22 @@ import java.util.concurrent.atomic.AtomicInteger
  * User: Leon Lee <mail.lgq@gmail.com>
  * Date: 12-12-20
  */
-class EventHelper {
+class ProcessHelper {
     private AtomicInteger counter
 
+    Long rid
+    Long pid
     Container container
     Vertx vertx
     Message message
+    Map results
+    Map errors
 
-    EventHelper(Container container, Vertx vertx, Message message) {
+    ProcessHelper(Container container, Vertx vertx, Message message) {
         this.container = container
         this.vertx = vertx
         this.message = message
+        rid = message.body.rid
     }
 
     def newProcess(int max) {
@@ -44,25 +49,26 @@ class EventHelper {
     }
 
     def getParam() {
-        message?.body
+        message?.body?.params
     }
 
     void sendOK() {
-        sendOK(Status.OK)
+        sendStatus(Status.OK)
     }
 
     void sendStatus(int status) {
         sendStatus(status, null)
     }
 
-    void sendStatus(int status, Object data) {
+    void sendStatus(int status, String name, Object data) {
+        results.put(name, data)
         if (counter.decrementAndGet()) return
 
-        message.reply(new Gson().toJson([status: status, data: data]))
+        message.reply(new Gson().toJson([status: status, data: results]))
     }
 
-    void sendOK(Object data) {
-        sendStatus(Status.OK, data)
+    void sendOK(String name, Object data) {
+        sendStatus(Status.OK, name, data)
     }
 
     void sendError(String error) {

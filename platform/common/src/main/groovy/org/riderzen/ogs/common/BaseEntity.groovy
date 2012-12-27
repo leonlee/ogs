@@ -9,7 +9,7 @@ import net.sf.oval.constraint.NotNull
  * User: Leon Lee <mail.lgq@gmail.com>
  * Date: 12-12-7
  */
-class BaseModel {
+abstract class BaseEntity {
     Long id
     @NotNull
     Long createdOn
@@ -17,20 +17,20 @@ class BaseModel {
     Long updatedOn
     Long vsn
 
+    BaseEntity() {
+
+    }
+
     static def transientAttributes = ['class', 'metaClass', 'transientAttributes', 'tableName']
 
-    BaseModel() {
-
+    def getTransientAttributes() {
+        return transientAttributes
     }
 
-    static def excludeAttributes(fields) {
-        transientAttributes.addAll(fields)
-    }
-
-    def pAttributes() {
+    def getpAttributes() {
         def propMap = properties;
 
-        transientAttributes?.each {
+        getTransientAttributes()?.each {
             propMap.remove(it)
         }
 
@@ -65,9 +65,12 @@ class BaseModel {
 
     static GsonBuilder createBuilder() {
         new GsonBuilder()
-//                .serializeNulls()
+                .serializeNulls()
                 .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
     }
 
+    String getShardBy() {}
+
+    abstract String getEntityName()
 }

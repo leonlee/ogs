@@ -1,7 +1,7 @@
 import org.riderzen.ogs.auth.RegisterProcessor
-import org.riderzen.ogs.auth.User
 import org.riderzen.ogs.common.Address
-import org.riderzen.ogs.common.EventHelper
+import org.riderzen.ogs.common.ProcessHelper
+import org.riderzen.ogs.common.Tools
 import org.vertx.groovy.core.eventbus.Message
 
 /**
@@ -17,7 +17,7 @@ logger.info "starting sys-auth"
 
 eb.registerHandler(config?.address ?: Address.sysAuthRegister.val) { Message message ->
     logger.debug("received message ${message.body}")
-    def eh = new EventHelper(container: container, vertx: vertx, message: message)
-    new RegisterProcessor(eh: eh).process()
+    def eh = new ProcessHelper(container: container, vertx: vertx, message: message)
+    new RegisterProcessor(pid: Tools.nextId(RegisterProcessor.name), eh: eh).process()
 }
 

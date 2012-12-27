@@ -27,7 +27,7 @@ eb.registerHandler(config?.address ?: Address.appProtocol.val) { Message upstrea
 
     Gson gson = new Gson()
     Map message = gson.fromJson(messageJson, Map.class)
-    def rid = Tools.nextRid()
+    def rid = Tools.nextId('rid')
 
     logger.debug "received rid:${rid} endpoint:${message.endpoint} params:${message.params}"
     println "received rid:${rid} endpoint:${message.endpoint} params:${message.params}"

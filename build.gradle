@@ -3,7 +3,7 @@ def emptyProjects = ['modules', 'platform',]
 configure(subprojects.findAll { project -> !emptyProjects.find {it == project.name}  }) {
     apply plugin: 'java'
     apply plugin: 'groovy'
-    apply plugin: 'idea'
+//    apply plugin: 'idea'
 
     group = 'org.riderzen.ogs'
 
@@ -79,7 +79,7 @@ configure(subprojects.findAll { project -> !emptyProjects.find {it == project.na
     }
 
     task installMod(type: Copy, dependsOn: 'copyMod') {
-        into "${System.getenv('VERTX_HOME')?.replaceAll('\\\\', '/')?:rootProject.projectDir + '/build'}/mods"
+        into "${System.getenv('VERTX_HOME')?.replaceAll('\\\\', '/')?:rootProject.projectDir.absolutePath + '/build'}/mods"
         from "build/mod"
     }
 

@@ -5,13 +5,13 @@ package org.riderzen.ogs.common
  * Date: 12-12-23
  */
 class DataStoreHelper {
-    def static String generateInsertSql(model) {
+    def static String generateInsertSql(BaseEntity entity) {
         StringBuilder buffer = new StringBuilder("insert into ")
-        buffer.append(model.tableName)
+        buffer.append(entity.entityName)
         buffer.append(" (")
         StringBuilder paramBuffer = new StringBuilder()
         boolean first = true
-        for (String column : model.pAttributes().keySet()) {
+        for (String column : entity.pAttributes.keySet()) {
             if (first) {
                 first = false
                 paramBuffer.append("?")
